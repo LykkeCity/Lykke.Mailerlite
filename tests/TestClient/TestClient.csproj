@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>LykkeExchange.Lykke.Mailerlite.TestClient</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Lykke.Mailerlite.ApiClient\Lykke.Mailerlite.ApiClient.csproj" />
+    <ProjectReference Include="..\..\src\Lykke.Mailerlite.ApiContract\Lykke.Mailerlite.ApiContract.csproj" />
+  </ItemGroup>
+
+</Project>

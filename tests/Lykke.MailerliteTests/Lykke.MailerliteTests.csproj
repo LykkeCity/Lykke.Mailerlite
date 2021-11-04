@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <AssemblyName>LykkeExchange.Lykke.MailerliteTests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.11" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+    <PackageReference Include="Swisschain.Extensions.Testing" Version="1.0.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="Shouldly" Version="4.0.3" />
+    <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.2.0" />
+    <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="3.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Lykke.Mailerlite.ApiClient\Lykke.Mailerlite.ApiClient.csproj" />
+    <ProjectReference Include="..\..\src\Lykke.Mailerlite.ApiContract\Lykke.Mailerlite.ApiContract.csproj" />
+    <ProjectReference Include="..\..\src\Lykke.Mailerlite.Common\Lykke.Mailerlite.Common.csproj" />
+    <ProjectReference Include="..\..\src\Lykke.Mailerlite.MessagingContract\Lykke.Mailerlite.MessagingContract.csproj" />
+    <ProjectReference Include="..\..\src\Lykke.Mailerlite.Worker\Lykke.Mailerlite.Worker.csproj" />
+    <ProjectReference Include="..\..\src\Lykke.Mailerlite\Lykke.Mailerlite.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Configuration\api_settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
