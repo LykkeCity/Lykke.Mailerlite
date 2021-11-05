@@ -92,7 +92,6 @@ namespace Lykke.MailerliteTests.Persistence
             itemFromDb.Email.ShouldBe(email);
             itemFromDb.KycState.ShouldBe(kycState);
             itemFromDb.Deposited.ShouldBeFalse();
-            itemFromDb.KycStateTimestamp.ShouldBe(timestamp);
         }
         
         [Fact]
