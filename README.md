@@ -7,4 +7,3 @@
 
 # Environment Variables
 [Logging](https://github.com/swisschain/Swisschain.Sdk.Server/blob/master/README.md#logging)
-
