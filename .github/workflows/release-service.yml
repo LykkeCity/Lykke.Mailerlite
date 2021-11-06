@@ -47,3 +47,29 @@ jobs:
         # snapshot: true # use snapshot to push an additional image, which is tagged with {YEAR}{MONTH}{DAY}{HOUR}{MINUTE}{SECOND}{first 6 digits of the git sha}
         tag_names: true  
         tag_name_skip: service-
+    - name: Update Docker Image
+      uses: swisschain/replace-docker-image@master
+      env:
+        DOCKER_IMAGE_NAME: 'lykke-exchange-lykke-mailerlite'
+        DOCKER_REPOSITORY_NAME: 'swisschains'
+        GIT_USER_API_TOKEN: ${{ secrets.GITHUBSWISSCHAIN_USER_API_TOKEN }}
+        GIT_USER_NAME: 'Github Swisschain'
+        GIT_USER_EMAIL: github@swisschain.io
+        GIT_INFRASTRUCTURE_REPOSITORY_BRANCH: 'test'
+        GIT_INFRASTRUCTURE_REPOSITORY_OWNER: 'swisschain'
+        GIT_INFRASTRUCTURE_REPOSITORY_NAME: 'lykke-kubernetes-dev'
+        GIT_REPOSITORY_NAME: ${{ github.event.repository.name }}
+        INPUT_TAG_NAME_SKIP: 'service-'        
+    - name: Update Docker Image
+      uses: swisschain/replace-docker-image@master
+      env:
+        DOCKER_IMAGE_NAME: 'lykke-exchange-lykke-mailerlite-worker'
+        DOCKER_REPOSITORY_NAME: 'swisschains'
+        GIT_USER_API_TOKEN: ${{ secrets.GITHUBSWISSCHAIN_USER_API_TOKEN }}
+        GIT_USER_NAME: 'Github Swisschain'
+        GIT_USER_EMAIL: github@swisschain.io
+        GIT_INFRASTRUCTURE_REPOSITORY_BRANCH: 'test'
+        GIT_INFRASTRUCTURE_REPOSITORY_OWNER: 'swisschain'
+        GIT_INFRASTRUCTURE_REPOSITORY_NAME: 'lykke-kubernetes-dev'
+        GIT_REPOSITORY_NAME: ${{ github.event.repository.name }}
+        INPUT_TAG_NAME_SKIP: 'service-'        
