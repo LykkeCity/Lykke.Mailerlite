@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyName>Swisschain.LykkeExchange.Lykke.Mailerlite.ApiClient</AssemblyName>
-    <PackageId>Swisschain.LykkeExchange.Lykke.Mailerlite.ApiClient</PackageId>
-    <RootNamespace>Swisschain.LykkeExchange.Lykke.Mailerlite.ApiClient</RootNamespace>
+    <AssemblyName>Lykke.Mailerlite.ApiClient</AssemblyName>
+    <PackageId>Lykke.Mailerlite.ApiClient</PackageId>
+    <RootNamespace>Lykke.Mailerlite.ApiClient</RootNamespace>
     <Authors>Swisschain</Authors>
     <Product>LykkeExchange</Product>
   </PropertyGroup>
