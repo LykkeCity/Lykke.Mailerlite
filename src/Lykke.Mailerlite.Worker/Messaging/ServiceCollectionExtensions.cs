@@ -27,18 +27,30 @@ namespace Lykke.Mailerlite.Worker.Messaging
                 
                 x.UsingRabbitMq((context, cfg) =>
                 {
-                    cfg.Host(rabbitMqConfig.HostUrl,
-                        host =>
-                        {
-                            host.Username(rabbitMqConfig.Username);
-                            host.Password(rabbitMqConfig.Password);
-                        });
+                    if (rabbitMqConfig.Port == 0)
+                    {
+                        cfg.Host(rabbitMqConfig.HostUrl,
+                            host =>
+                            {
+                                host.Username(rabbitMqConfig.Username);
+                                host.Password(rabbitMqConfig.Password);
+                            });
+                    }
+                    else
+                    {
+                        cfg.Host(rabbitMqConfig.HostUrl,
+                            rabbitMqConfig.Port,
+                            rabbitMqConfig.VirtualHost,
+                            host =>
+                            {
+                                host.Username(rabbitMqConfig.Username);
+                                host.Password(rabbitMqConfig.Password);
+                            });
+                    }
                     
                     cfg.UseMessageScheduler(schedulerEndpoint);
 
                     cfg.UseDefaultRetries(context);
-
-                    //cfg.UsePrometheusMetrics(serviceName: "mailerlite-worker");
 
                     ConfigureReceivingEndpoints(cfg, context);
                 });

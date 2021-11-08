@@ -21,6 +21,7 @@ namespace Lykke.MailerliteTests.Sdk
         public string AmpqUrl => _container.AmpqUrl;
         public string User => _container.User;
         public string Password => _container.Password;
+        public string VirtualHost => "/";
 
         public async Task InitializeAsync()
         {

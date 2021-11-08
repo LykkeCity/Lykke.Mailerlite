@@ -63,6 +63,7 @@ namespace Lykke.MailerliteTests.Sdk
                 {"RabbitMq:HostUrl", _rabbitMqFixture.AmpqUrl},
                 {"RabbitMq:Username", _rabbitMqFixture.User},
                 {"RabbitMq:Password", _rabbitMqFixture.Password},
+                {"RabbitMq:VirtualHost", _rabbitMqFixture.VirtualHost},
                 {"Mailerlite:CustomerCreateUrl", CustomerCreateUrl},
                 {"Mailerlite:ApiKey", MailerliteApiKey},
                 {"Mailerlite:CustomerUpdateFieldUrl", CustomerUpdateFieldUrl},
