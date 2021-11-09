@@ -55,9 +55,9 @@ jobs:
         GIT_USER_API_TOKEN: ${{ secrets.GITHUBSWISSCHAIN_USER_API_TOKEN }}
         GIT_USER_NAME: 'Github Swisschain'
         GIT_USER_EMAIL: github@swisschain.io
-        GIT_INFRASTRUCTURE_REPOSITORY_BRANCH: 'test'
+        GIT_INFRASTRUCTURE_REPOSITORY_BRANCH: 'master'
         GIT_INFRASTRUCTURE_REPOSITORY_OWNER: 'swisschain'
-        GIT_INFRASTRUCTURE_REPOSITORY_NAME: 'lykke-kubernetes-dev'
+        GIT_INFRASTRUCTURE_REPOSITORY_NAME: 'lykke-kubernetes-test'
         GIT_REPOSITORY_NAME: ${{ github.event.repository.name }}
         INPUT_TAG_NAME_SKIP: 'service-'        
     - name: Update Docker Image
@@ -68,8 +68,8 @@ jobs:
         GIT_USER_API_TOKEN: ${{ secrets.GITHUBSWISSCHAIN_USER_API_TOKEN }}
         GIT_USER_NAME: 'Github Swisschain'
         GIT_USER_EMAIL: github@swisschain.io
-        GIT_INFRASTRUCTURE_REPOSITORY_BRANCH: 'test'
+        GIT_INFRASTRUCTURE_REPOSITORY_BRANCH: 'master'
         GIT_INFRASTRUCTURE_REPOSITORY_OWNER: 'swisschain'
-        GIT_INFRASTRUCTURE_REPOSITORY_NAME: 'lykke-kubernetes-dev'
+        GIT_INFRASTRUCTURE_REPOSITORY_NAME: 'lykke-kubernetes-test'
         GIT_REPOSITORY_NAME: ${{ github.event.repository.name }}
         INPUT_TAG_NAME_SKIP: 'service-'        
