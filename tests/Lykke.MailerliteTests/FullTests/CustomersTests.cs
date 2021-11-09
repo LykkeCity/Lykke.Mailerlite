@@ -33,7 +33,7 @@ namespace Lykke.MailerliteTests.FullTests
         {
             _apiFixture = new ApiFixture(testOutputHelper, rabbitMqFixture);
             _workerFixture = new WorkerFixture(rabbitMqFixture, persistenceFixture, testOutputHelper);
-            _lykkeMailerliteClient = new LykkeLykkeMailerliteClient("http://localhost:5001");
+            _lykkeMailerliteClient = new LykkeMailerliteClient("http://localhost:5001");
             _persistenceFixture = persistenceFixture;
         }
 
