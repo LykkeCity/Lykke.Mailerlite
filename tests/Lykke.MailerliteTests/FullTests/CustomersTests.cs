@@ -92,12 +92,26 @@ namespace Lykke.MailerliteTests.FullTests
                 ItExpr.IsAny<CancellationToken>()
             );
             
+            _workerFixture.MockHttpMessageHandler.Protected().Verify<Task<HttpResponseMessage>>(
+                "SendAsync",
+                Times.Once(),
+                ItExpr.Is<HttpRequestMessage>(req => (
+                    req.Method == HttpMethod.Put &&
+                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, email)), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
+                    req.Content.Headers.Any(x => x.Key == ("X-MailerLite-ApiKey") && x.Value.Any(y => y == _workerFixture.MailerliteApiKey)) &&
+                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("hasEverSubmittedDocuments")))) &&
+                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["hasEverSubmittedDocuments"].Value<string>() == "false"
+                )),
+                ItExpr.IsAny<CancellationToken>()
+            );
+            
             customerFromDb.Email.ShouldBe(email);
             customerFromDb.Id.ShouldBe(id);
             customerFromDb.KycState.ShouldBe(defaultKyc);
             customerFromDb.Deposited.ShouldBeFalse();
+            customerFromDb.HasEverSubmittedDocuments.ShouldBeFalse();
 
-            var updatedKyc = "NewKycState";
+            var updatedKyc = "NewKycStateContainsJumio";
             
             await _lykkeMailerliteClient.Customers.UpdateKycAsync(new UpdateCustomerKycRequest
             {
@@ -122,10 +136,24 @@ namespace Lykke.MailerliteTests.FullTests
                 ItExpr.IsAny<CancellationToken>()
             );
             
+            _workerFixture.MockHttpMessageHandler.Protected().Verify<Task<HttpResponseMessage>>(
+                "SendAsync",
+                Times.Once(),
+                ItExpr.Is<HttpRequestMessage>(req => (
+                    req.Method == HttpMethod.Put &&
+                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, email)), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
+                    req.Content.Headers.Any(x => x.Key == ("X-MailerLite-ApiKey") && x.Value.Any(y => y == _workerFixture.MailerliteApiKey)) &&
+                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("hasEverSubmittedDocuments")))) &&
+                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["hasEverSubmittedDocuments"].Value<string>() == "true"
+                )),
+                ItExpr.IsAny<CancellationToken>()
+            );
+            
             customerFromDb.Email.ShouldBe(email);
             customerFromDb.Id.ShouldBe(id);
             customerFromDb.KycState.ShouldBe(updatedKyc);
             customerFromDb.Deposited.ShouldBeFalse();
+            customerFromDb.HasEverSubmittedDocuments.ShouldBeTrue();
             
             await _lykkeMailerliteClient.Customers.UpdateDepositAsync(new UpdateCustomerDepositRequest
             {
@@ -153,6 +181,7 @@ namespace Lykke.MailerliteTests.FullTests
             customerFromDb.Id.ShouldBe(id);
             customerFromDb.KycState.ShouldBe(updatedKyc);
             customerFromDb.Deposited.ShouldBeTrue();
+            customerFromDb.HasEverSubmittedDocuments.ShouldBeTrue();
         }
 
         private async Task<Customer> WaitUntilCustomerCreatedAsync(string id, string kyc=default, bool? deposited=default)

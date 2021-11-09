@@ -34,6 +34,7 @@ namespace Lykke.MailerliteTests.Persistence
             itemFromDb.KycState.ShouldBeNull();
             itemFromDb.Deposited.ShouldBeFalse();
             itemFromDb.KycStateTimestamp.ShouldBeNull();
+            itemFromDb.HasEverSubmittedDocuments.ShouldBeFalse();
         }
 
         [Fact]
@@ -43,7 +44,7 @@ namespace Lykke.MailerliteTests.Persistence
             var customersRepository = new CustomersRepository(context);
 
             var id = Guid.NewGuid().ToString();
-            var email = "email@mail.com";
+            var email = "email222@mail.com";
             
             await customersRepository.AddOrIgnoreAsync(Customer.Create(id, email));
             
@@ -60,6 +61,7 @@ namespace Lykke.MailerliteTests.Persistence
             itemFromDb.KycState.ShouldBeNull();
             itemFromDb.Deposited.ShouldBeFalse();
             itemFromDb.KycStateTimestamp.ShouldBeNull();
+            itemFromDb.HasEverSubmittedDocuments.ShouldBeFalse();
         }
 
         [Fact]
@@ -92,6 +94,7 @@ namespace Lykke.MailerliteTests.Persistence
             itemFromDb.Email.ShouldBe(email);
             itemFromDb.KycState.ShouldBe(kycState);
             itemFromDb.Deposited.ShouldBeFalse();
+            itemFromDb.HasEverSubmittedDocuments.ShouldBeFalse();
         }
         
         [Fact]
@@ -120,6 +123,36 @@ namespace Lykke.MailerliteTests.Persistence
             itemFromDb.Id.ShouldBe(id);
             itemFromDb.Email.ShouldBe(email);
             itemFromDb.Deposited.ShouldBeTrue();
+            itemFromDb.HasEverSubmittedDocuments.ShouldBeFalse();
+        }
+        
+        [Fact]
+        public async Task CanUpdateEverSubmittedDocuments()
+        {
+            var context = new DatabaseContext(Fixture.DbContextOptionsBuilder.Options);
+            var customersRepository = new CustomersRepository(context);
+
+            var id = Guid.NewGuid().ToString();
+            var email = "email4@mail.com";
+            
+            await customersRepository.AddOrIgnoreAsync(Customer.Create(id, email));
+
+            var itemFromDb = await customersRepository.GetOrDefault(id);
+            
+            itemFromDb.UpdateHasEverSubmittedDocuments();
+            
+            context = new DatabaseContext(Fixture.DbContextOptionsBuilder.Options);
+            customersRepository = new CustomersRepository(context);
+
+            await customersRepository.Update(itemFromDb);
+            
+            itemFromDb = await customersRepository.GetOrDefault(id);
+            
+            itemFromDb.ShouldNotBeNull();
+            itemFromDb.Id.ShouldBe(id);
+            itemFromDb.Email.ShouldBe(email);
+            itemFromDb.Deposited.ShouldBeFalse();
+            itemFromDb.HasEverSubmittedDocuments.ShouldBeTrue();
         }
     }
 }

@@ -55,7 +55,7 @@ namespace Lykke.Mailerlite.Common.Persistence.Customers
             if (entity == null)
                 return null;
 
-            var customer = Customer.Restore(entity.Id, entity.Email, entity.KycState, entity.KycStateTimestamp, entity.Deposited);
+            var customer = Customer.Restore(entity.Id, entity.Email, entity.KycState, entity.KycStateTimestamp, entity.Deposited, entity.HasEverSubmittedDocuments);
 
             return customer;
         }
@@ -68,7 +68,8 @@ namespace Lykke.Mailerlite.Common.Persistence.Customers
                 Email = domainModel.Email,
                 KycState = domainModel.KycState,
                 KycStateTimestamp = domainModel.KycStateTimestamp,
-                Deposited = domainModel.Deposited
+                Deposited = domainModel.Deposited,
+                HasEverSubmittedDocuments = domainModel.HasEverSubmittedDocuments
             };
 
             return entity;

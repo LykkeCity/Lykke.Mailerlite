@@ -41,12 +41,19 @@ namespace Lykke.Mailerlite.Worker.Messaging.Consumers
                     if (customer == null)
                         throw new InvalidOperationException($"Customer with Id {command.CustomerId} does not exist (at least yet).");
 
-                    if (customer.KycStateTimestamp > command.Timestamp)
-                        return;
-                    
-                    customer.UpdateKycState(command.KycState, command.Timestamp);
+                    if (!customer.HasEverSubmittedDocuments && command.KycState.ToLower().Contains("jumio"))
+                    {
+                        customer.UpdateHasEverSubmittedDocuments();
+                        
+                        await _mailerlite.SetCustomerSubmittedDocumentsAsync(customer.Email, true);
+                    }
 
-                    await _mailerlite.SetCustomerKycAsync(customer.Email, command.KycState);
+                    if (customer.KycStateTimestamp < command.Timestamp)
+                    {
+                        customer.UpdateKycState(command.KycState, command.Timestamp);
+
+                        await _mailerlite.SetCustomerKycAsync(customer.Email, command.KycState);
+                    }
 
                     await unitOfWork.Customers.Update(customer);
 

@@ -9,5 +9,6 @@ namespace Lykke.Mailerlite.Common.Persistence.Customers
         public string KycState { get; set; }
         public DateTime? KycStateTimestamp { get; set; }
         public bool Deposited { set; get; }
+        public bool HasEverSubmittedDocuments { set; get; }
     }
 }

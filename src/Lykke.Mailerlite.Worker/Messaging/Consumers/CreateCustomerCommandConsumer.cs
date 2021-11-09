@@ -45,6 +45,8 @@ namespace Lykke.Mailerlite.Worker.Messaging.Consumers
 
                     await _mailerlite.SetCustomerKycAsync(command.Email, command.KycState);
 
+                    await _mailerlite.SetCustomerSubmittedDocumentsAsync(command.Email, false);
+
                     await _mailerlite.SetCustomerDepositedAsync(command.Email, false);
 
                     await unitOfWork.Customers.AddOrIgnoreAsync(customer);

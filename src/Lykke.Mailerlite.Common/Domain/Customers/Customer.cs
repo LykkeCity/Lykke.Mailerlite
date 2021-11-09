@@ -12,12 +12,13 @@ namespace Lykke.Mailerlite.Common.Domain.Customers
             Email = email;
         }
         
-        private Customer(string id, string email, string kycState, DateTime? kycStateTimestamp, bool deposited)
+        private Customer(string id, string email, string kycState, DateTime? kycStateTimestamp, bool deposited, bool hasEverSubmittedDocuments)
             : this(id, email)
         {
             KycState = kycState;
             KycStateTimestamp = kycStateTimestamp;
             Deposited = deposited;
+            HasEverSubmittedDocuments = hasEverSubmittedDocuments;
         }
         
         public string Id { get; }
@@ -25,6 +26,7 @@ namespace Lykke.Mailerlite.Common.Domain.Customers
         public string KycState { get; private set;  }
         public DateTime? KycStateTimestamp { get; private set; }
         public bool Deposited { get; private set; }
+        public bool HasEverSubmittedDocuments { get; private set; }
 
         public static Customer Create(string id, string email)
         {
@@ -33,9 +35,9 @@ namespace Lykke.Mailerlite.Common.Domain.Customers
             return customer;
         }
 
-        public static Customer Restore(string id, string email, string kycState, DateTime? kycStateTimestamp, bool deposited)
+        public static Customer Restore(string id, string email, string kycState, DateTime? kycStateTimestamp, bool deposited, bool hasEverSubmittedDocuments)
         {
-            var customer = new Customer(id, email, kycState, kycStateTimestamp, deposited);
+            var customer = new Customer(id, email, kycState, kycStateTimestamp, deposited, hasEverSubmittedDocuments);
 
             return customer;
         }
@@ -49,6 +51,11 @@ namespace Lykke.Mailerlite.Common.Domain.Customers
         public void UpdateDeposited()
         {
             Deposited = true;
+        }
+
+        public void UpdateHasEverSubmittedDocuments()
+        {
+            HasEverSubmittedDocuments = true;
         }
     }
 }
