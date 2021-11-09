@@ -26,7 +26,7 @@ namespace Lykke.Mailerlite.ApiClient
             
             serviceCollection.AddGrpcClient<Customers.CustomersClient>(options);
 
-            serviceCollection.AddTransient<ILykkeMailerliteClient, LykkeLykkeMailerliteClient>();
+            serviceCollection.AddTransient<ILykkeMailerliteClient, LykkeMailerliteClient>();
             
             return serviceCollection;
         }
@@ -37,7 +37,7 @@ namespace Lykke.Mailerlite.ApiClient
             LykkeMailerliteServiceOptions options) where T : class
         {
             serviceCollection
-                .AddGrpcClient<T>(NameFor<T>(), o => o.Address = options.GrpcServiceUrl)
+                .AddGrpcClient<T>(NameFor<T>(), o => o.Address = new Uri(options.GrpcServiceUrl))
                 .WithGrpcGlobalDeadline(new GlobalDeadlineInterceptorOptions { Timeout = options.Timeout });
         }
     }
