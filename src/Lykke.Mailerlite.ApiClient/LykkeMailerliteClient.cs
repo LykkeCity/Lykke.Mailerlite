@@ -12,13 +12,21 @@ namespace Lykke.Mailerlite.ApiClient
     {
         private readonly GrpcChannel _channel;
 
-        public LykkeMailerliteClient(string uri)
+        public LykkeMailerliteClient(string uri, bool unsecure=false)
         {
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-            _channel = GrpcChannel.ForAddress(uri, new GrpcChannelOptions
+
+            if (unsecure)
             {
-                HttpHandler = new GrpcWebHandler(new HttpClientHandler())
-            });
+                _channel = GrpcChannel.ForAddress(uri, new GrpcChannelOptions
+                {
+                    HttpHandler = new GrpcWebHandler(new HttpClientHandler())
+                });
+            }
+            else
+            {
+                _channel = GrpcChannel.ForAddress(uri);
+            }
 
             Monitoring = new Monitoring.MonitoringClient(_channel);
             Customers = new Customers.CustomersClient(_channel);
