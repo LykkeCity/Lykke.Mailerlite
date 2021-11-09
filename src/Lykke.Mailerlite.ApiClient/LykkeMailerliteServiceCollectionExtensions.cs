@@ -17,11 +17,11 @@ namespace Lykke.Mailerlite.ApiClient
             return $"{Prefix}-{typeof(T).FullName}";
         }
         
-        public static IServiceCollection AddSiriusApiClient(this IServiceCollection serviceCollection, LykkeMailerliteServiceOptions options)
+        public static IServiceCollection AddMailerliteClient(this IServiceCollection serviceCollection, LykkeMailerliteServiceOptions options)
         {
-            if (options.ServerGrpcUrl == null)
+            if (options.GrpcServiceUrl == null)
             {
-                throw new ArgumentNullException(nameof(options.ServerGrpcUrl));
+                throw new ArgumentNullException(nameof(options.GrpcServiceUrl));
             }
             
             serviceCollection.AddGrpcClient<Customers.CustomersClient>(options);
@@ -37,7 +37,7 @@ namespace Lykke.Mailerlite.ApiClient
             LykkeMailerliteServiceOptions options) where T : class
         {
             serviceCollection
-                .AddGrpcClient<T>(NameFor<T>(), o => o.Address = options.ServerGrpcUrl)
+                .AddGrpcClient<T>(NameFor<T>(), o => o.Address = options.GrpcServiceUrl)
                 .WithGrpcGlobalDeadline(new GlobalDeadlineInterceptorOptions { Timeout = options.Timeout });
         }
     }
