@@ -114,7 +114,7 @@ namespace Lykke.MailerliteTests.FullTests
                     Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, email)), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
                     req.Content.Headers.Any(x => x.Key == ("X-MailerLite-ApiKey") && x.Value.Any(y => y == _workerFixture.MailerliteApiKey)) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("registered")))) &&
-                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["registered"].Value<string>() == "2021-11-11"
+                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["registered"].Value<string>() == timestamp.ToString("yyyy-MM-dd")
                 )),
                 ItExpr.IsAny<CancellationToken>()
             );
