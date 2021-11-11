@@ -39,7 +39,10 @@ namespace Lykke.Mailerlite.Worker.Messaging.Consumers
                     var customer = await unitOfWork.Customers.GetOrDefault(command.CustomerId);
 
                     if (customer == null)
-                        throw new InvalidOperationException($"Customer with Id {command.CustomerId} does not exist (at least yet).");
+                    {
+                        _logger.LogWarning($"Customer with Id {command.CustomerId} does not exist (at least yet).");
+                        return;
+                    }
 
                     if (customer.Deposited)
                         return;
