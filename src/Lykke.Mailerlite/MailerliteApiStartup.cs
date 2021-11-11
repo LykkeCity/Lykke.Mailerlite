@@ -1,4 +1,5 @@
 ﻿using System;
+using Grpc.AspNetCore.Server;
 using Lykke.Mailerlite.Common;
 using Lykke.Mailerlite.Common.Commands;
 using Microsoft.AspNetCore.Builder;

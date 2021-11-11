@@ -80,7 +80,7 @@ namespace Lykke.Mailerlite.Common.Domain.Mailerlite
         public async Task SetCustomerSubmittedDocumentsAsync(string email, bool value)
         {
             var content = new StringContent(
-                JsonConvert.SerializeObject(new { fields = new { hasEverSubmittedDocuments = value ? "true" : "false" } }),
+                JsonConvert.SerializeObject(new { fields = new { has_ever_submitted_documents = value ? "true" : "false" } }),
                 Encoding.UTF8,
                 "application/json");
             
