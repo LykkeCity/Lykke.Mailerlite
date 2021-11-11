@@ -99,8 +99,8 @@ namespace Lykke.MailerliteTests.FullTests
                     req.Method == HttpMethod.Put &&
                     Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, email)), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
                     req.Content.Headers.Any(x => x.Key == ("X-MailerLite-ApiKey") && x.Value.Any(y => y == _workerFixture.MailerliteApiKey)) &&
-                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("hasEverSubmittedDocuments")))) &&
-                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["hasEverSubmittedDocuments"].Value<string>() == "false"
+                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("has_ever_submitted_documents")))) &&
+                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["has_ever_submitted_documents"].Value<string>() == "false"
                 )),
                 ItExpr.IsAny<CancellationToken>()
             );
@@ -143,8 +143,8 @@ namespace Lykke.MailerliteTests.FullTests
                     req.Method == HttpMethod.Put &&
                     Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, email)), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
                     req.Content.Headers.Any(x => x.Key == ("X-MailerLite-ApiKey") && x.Value.Any(y => y == _workerFixture.MailerliteApiKey)) &&
-                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("hasEverSubmittedDocuments")))) &&
-                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["hasEverSubmittedDocuments"].Value<string>() == "true"
+                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("has_ever_submitted_documents")))) &&
+                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["has_ever_submitted_documents"].Value<string>() == "true"
                 )),
                 ItExpr.IsAny<CancellationToken>()
             );
