@@ -43,6 +43,7 @@ namespace Lykke.MailerliteTests.FullTests
             var id = Guid.NewGuid().ToString();
             var email = $"{Guid.NewGuid():N}@fake-mail.com";
             var defaultKyc = "DefaultState";
+            var timestamp = DateTime.UtcNow;
             
             await _lykkeMailerliteClient.Customers.CreateAsync(new CreateCustomerRequest
             {
@@ -50,7 +51,7 @@ namespace Lykke.MailerliteTests.FullTests
                 CustomerId = id,
                 Email = email,
                 KycState = defaultKyc,
-                Timestamp = DateTime.UtcNow.ToTimestamp()
+                Timestamp = timestamp.ToTimestamp()
             });
 
             var customerFromDb = await WaitUntilCustomerCreatedAsync(id);
@@ -101,6 +102,19 @@ namespace Lykke.MailerliteTests.FullTests
                     req.Content.Headers.Any(x => x.Key == ("X-MailerLite-ApiKey") && x.Value.Any(y => y == _workerFixture.MailerliteApiKey)) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("has_ever_submitted_documents")))) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["has_ever_submitted_documents"].Value<string>() == "false"
+                )),
+                ItExpr.IsAny<CancellationToken>()
+            );
+            
+            _workerFixture.MockHttpMessageHandler.Protected().Verify<Task<HttpResponseMessage>>(
+                "SendAsync",
+                Times.Once(),
+                ItExpr.Is<HttpRequestMessage>(req => (
+                    req.Method == HttpMethod.Put &&
+                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, email)), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
+                    req.Content.Headers.Any(x => x.Key == ("X-MailerLite-ApiKey") && x.Value.Any(y => y == _workerFixture.MailerliteApiKey)) &&
+                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("registered")))) &&
+                    JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["registered"].Value<string>() == "2021-11-11"
                 )),
                 ItExpr.IsAny<CancellationToken>()
             );

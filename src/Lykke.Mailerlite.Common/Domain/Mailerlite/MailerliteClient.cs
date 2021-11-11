@@ -57,6 +57,25 @@ namespace Lykke.Mailerlite.Common.Domain.Mailerlite
 
             await _httpClient.SendAsync(message);
         }
+        
+        public async Task SetCustomerRegisteredAsync(string email, DateTime registered)
+        {
+            var content = new StringContent(
+                JsonConvert.SerializeObject(new { fields = new { registered = registered.ToString("yyyy-MM-dd") } }),
+                Encoding.UTF8,
+                "application/json");
+            
+            content.Headers.Add("X-MailerLite-ApiKey", _mailerliteConfig.ApiKey);
+            
+            var message = new HttpRequestMessage
+            {
+                Content = content, 
+                Method = HttpMethod.Put,
+                RequestUri = new Uri(string.Format(_mailerliteConfig.CustomerUpdateFieldUrl, email))
+            };
+
+            await _httpClient.SendAsync(message);
+        }
 
         public async Task SetCustomerDepositedAsync(string email, bool value)
         {

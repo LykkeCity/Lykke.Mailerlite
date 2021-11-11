@@ -49,6 +49,8 @@ namespace Lykke.Mailerlite.Worker.Messaging.Consumers
 
                     await _mailerlite.SetCustomerDepositedAsync(command.Email, false);
 
+                    await _mailerlite.SetCustomerRegisteredAsync(command.Email, command.Timestamp);
+
                     await unitOfWork.Customers.AddOrIgnoreAsync(customer);
 
                     await unitOfWork.Commit();
