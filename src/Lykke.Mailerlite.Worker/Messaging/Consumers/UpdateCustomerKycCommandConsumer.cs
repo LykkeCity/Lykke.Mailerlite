@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Lykke.Mailerlite.Common.Commands;
+using Lykke.Mailerlite.Common.Configuration;
 using Lykke.Mailerlite.Common.Domain.Mailerlite;
 using Lykke.Mailerlite.Common.Persistence;
 using MassTransit;
@@ -12,15 +14,18 @@ namespace Lykke.Mailerlite.Worker.Messaging.Consumers
 {
     public class UpdateCustomerKycCommandConsumer : IConsumer<UpdateCustomerKycCommand>
     {
+        private readonly MailerliteConfig _mailerliteConfig;
         private readonly IUnitOfWorkManager<UnitOfWork> _unitOfWorkManager;
         private readonly IMailerliteClient _mailerlite;
         private readonly ILogger<UpdateCustomerKycCommandConsumer> _logger;
 
         public UpdateCustomerKycCommandConsumer(
+            MailerliteConfig mailerliteConfig,
             IUnitOfWorkManager<UnitOfWork> unitOfWorkManager,
             IMailerliteClient mailerlite,
             ILogger<UpdateCustomerKycCommandConsumer> logger)
         {
+            _mailerliteConfig = mailerliteConfig;
             _unitOfWorkManager = unitOfWorkManager;
             _mailerlite = mailerlite;
             _logger = logger;
@@ -56,6 +61,15 @@ namespace Lykke.Mailerlite.Worker.Messaging.Consumers
                         customer.UpdateKycState(command.KycState, command.Timestamp);
 
                         await _mailerlite.SetCustomerKycAsync(customer.Email, command.KycState);
+                    }
+
+                    if (_mailerliteConfig.StatusesToDeleteFromKycReminderGroupd.Contains(customer.KycState))
+                    {
+                        var groupdId = await _mailerlite.FindGroupIdByNameAsync(_mailerliteConfig.KycReminderGroup);
+                        if (groupdId.HasValue)
+                        {
+                            await _mailerlite.DeleteCustomerFromGroupAsync(customer.Email, groupdId.Value);   
+                        }
                     }
 
                     await unitOfWork.Customers.Update(customer);

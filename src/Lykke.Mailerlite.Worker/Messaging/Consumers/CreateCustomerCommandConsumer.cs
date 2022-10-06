@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Lykke.Mailerlite.Common.Commands;
+using Lykke.Mailerlite.Common.Configuration;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using Lykke.Mailerlite.Common.Domain.Customers;
@@ -13,15 +15,18 @@ namespace Lykke.Mailerlite.Worker.Messaging.Consumers
 {
     public class CreateCustomerCommandConsumer : IConsumer<CreateCustomerCommand>
     {
+        private readonly MailerliteConfig _mailerliteConfig;
         private readonly IUnitOfWorkManager<UnitOfWork> _unitOfWorkManager;
         private readonly IMailerliteClient _mailerlite;
         private readonly ILogger<CreateCustomerCommandConsumer> _logger;
 
         public CreateCustomerCommandConsumer(
+            MailerliteConfig mailerliteConfig,
             IUnitOfWorkManager<UnitOfWork> unitOfWorkManager,
             IMailerliteClient mailerlite,
             ILogger<CreateCustomerCommandConsumer> logger)
         {
+            _mailerliteConfig = mailerliteConfig;
             _unitOfWorkManager = unitOfWorkManager;
             _mailerlite = mailerlite;
             _logger = logger;
@@ -50,6 +55,11 @@ namespace Lykke.Mailerlite.Worker.Messaging.Consumers
                     await _mailerlite.SetCustomerDepositedAsync(command.Email, false);
 
                     await _mailerlite.SetCustomerRegisteredAsync(command.Email, command.Timestamp);
+
+                    var addToGroupTaskList = _mailerliteConfig.NewCustomerGroups
+                        .Union(new string[] { _mailerliteConfig.KycReminderGroup })
+                        .Select(x => _mailerlite.AddCustomerToGroupAsync(command.Email, x));
+                    await Task.WhenAll(addToGroupTaskList);
 
                     await unitOfWork.Customers.AddOrIgnoreAsync(customer);
 
