@@ -22,7 +22,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.103
+        dotnet-version: 5.0.x
     - name: Raise deploy to dev flag
       id: Raise_deploy_to_dev_flag
       run: |
