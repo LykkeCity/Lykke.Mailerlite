@@ -10,5 +10,8 @@ namespace Lykke.Mailerlite.Common.Domain.Mailerlite
         Task SetCustomerRegisteredAsync(string email, DateTime registered);
         Task SetCustomerDepositedAsync(string email, bool value);
         Task SetCustomerSubmittedDocumentsAsync(string email, bool value);
+        Task AddCustomerToGroupAsync(string email, string groupName);
+        Task<int?> FindGroupIdByNameAsync(string groupName);
+        Task DeleteCustomerFromGroupAsync(string email, int groupId);
     }
 }
