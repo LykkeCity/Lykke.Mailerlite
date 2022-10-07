@@ -63,7 +63,7 @@ namespace Lykke.Mailerlite.Worker.Messaging.Consumers
                         await _mailerlite.SetCustomerKycAsync(customer.Email, command.KycState);
                     }
 
-                    if (_mailerliteConfig.StatusesToDeleteFromKycReminderGroupd.Contains(customer.KycState))
+                    if (_mailerliteConfig.StatusesToDeleteFromKycReminderGroup.Contains(customer.KycState))
                     {
                         var groupdId = await _mailerlite.FindGroupIdByNameAsync(_mailerliteConfig.KycReminderGroup);
                         if (groupdId.HasValue)

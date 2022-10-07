@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -32,6 +33,12 @@ namespace Lykke.MailerliteTests.Sdk
         public Mock<HttpMessageHandler> MockHttpMessageHandler { get; }
         public string CustomerCreateUrl { get; }
         public string CustomerUpdateFieldUrl { get; }
+        public string AddCustomerToGroupUrl { set; get; }
+        public string FindGroupIdByNameUrl { set; get; }
+        public string DeleteCustomerFromGroupUrl { set; get; }
+        public IEnumerable<string> NewCustomerGroups { set; get; }
+        public string KycReminderGroup { set; get; }
+        public IEnumerable<string> StatusesToDeleteFromKycReminderGroup { set; get; }
         public string MailerliteApiKey { get; }
 
         public WorkerFixture(RabbitMqFixture rabbitMqFixture, PersistenceFixture persistenceFixture, ITestOutputHelper testOutputHelper)
@@ -49,6 +56,20 @@ namespace Lykke.MailerliteTests.Sdk
             MailerliteApiKey = "fakekey";
             CustomerCreateUrl = "http://fakeurl.com";
             CustomerUpdateFieldUrl = "http://fakeurl.com/{0}";
+            AddCustomerToGroupUrl = "http://fakeurl.com/groups/add";
+            FindGroupIdByNameUrl = "http://fakeurl.com/groups/search";
+            DeleteCustomerFromGroupUrl = "http://fakeurl.com/groups/delete/{0}/{1}";
+            NewCustomerGroups = new List<string>
+            {
+                "test1",
+                "test2"
+            };
+            KycReminderGroup = "test_kyc";
+            StatusesToDeleteFromKycReminderGroup = new List<string>
+            {
+                "status1",
+                "status2"
+            };
         }
         
         public async Task InitializeAsync()
@@ -67,7 +88,21 @@ namespace Lykke.MailerliteTests.Sdk
                 {"Mailerlite:CustomerCreateUrl", CustomerCreateUrl},
                 {"Mailerlite:ApiKey", MailerliteApiKey},
                 {"Mailerlite:CustomerUpdateFieldUrl", CustomerUpdateFieldUrl},
+                {"Mailerlite:AddCustomerToGroupUrl", AddCustomerToGroupUrl},
+                {"Mailerlite:FindGroupIdByNameUrl", FindGroupIdByNameUrl},
+                {"Mailerlite:DeleteCustomerFromGroupUrl", DeleteCustomerFromGroupUrl},
+                {"Mailerlite:KycReminderGroup", KycReminderGroup},
             };
+            var newCustomerGroupsList = NewCustomerGroups.ToList();
+            for (int index = 0; index < newCustomerGroupsList.Count; index++)
+            {
+                defaultAppSettings.Add($"Mailerlite:NewCustomerGroups:{index}", newCustomerGroupsList[index]);
+            }
+            var statusesToDeleteFromKycReminderGroupList = StatusesToDeleteFromKycReminderGroup.ToList();
+            for (int index = 0; index < statusesToDeleteFromKycReminderGroupList.Count; index++)
+            {
+                defaultAppSettings.Add($"Mailerlite:StatusesToDeleteFromKycReminderGroup:{index}", statusesToDeleteFromKycReminderGroupList[index]);
+            }
             var hostBuilder = new HostBuilder()
                 .SwisschainService<MailerliteWorkerStartup>(
                     options =>
@@ -86,7 +121,13 @@ namespace Lykke.MailerliteTests.Sdk
                                     {
                                         ApiKey = MailerliteApiKey,
                                         CustomerCreateUrl = CustomerCreateUrl,
-                                        CustomerUpdateFieldUrl = CustomerUpdateFieldUrl
+                                        CustomerUpdateFieldUrl = CustomerUpdateFieldUrl,
+                                        AddCustomerToGroupUrl = AddCustomerToGroupUrl,
+                                        FindGroupIdByNameUrl = FindGroupIdByNameUrl,
+                                        DeleteCustomerFromGroupUrl = DeleteCustomerFromGroupUrl,
+                                        NewCustomerGroups = NewCustomerGroups,
+                                        KycReminderGroup = KycReminderGroup,
+                                        StatusesToDeleteFromKycReminderGroup = StatusesToDeleteFromKycReminderGroup
                                     }));
                         });
                     },

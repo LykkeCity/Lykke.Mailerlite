@@ -1,20 +1,33 @@
 ﻿using System;
 using Lykke.Mailerlite.Common.Commands;
 using Lykke.Mailerlite.Common.Configuration;
+using Lykke.Mailerlite.Common.Domain.Mailerlite;
+using Lykke.Mailerlite.Common.Persistence;
 using MassTransit;
 using MassTransit.RabbitMqTransport;
 using Microsoft.Extensions.DependencyInjection;
 using Lykke.Mailerlite.Worker.Messaging.Consumers;
+using Microsoft.Extensions.Logging;
+using Swisschain.Extensions.Idempotency;
 using Swisschain.Extensions.MassTransit;
 
 namespace Lykke.Mailerlite.Worker.Messaging
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMessaging(this IServiceCollection services, RabbitMqConfig rabbitMqConfig)
+        public static IServiceCollection AddMessaging(this IServiceCollection services,
+            RabbitMqConfig rabbitMqConfig, MailerliteConfig mailerliteConfig)
         {
-            services.AddTransient<CreateCustomerCommandConsumer>();
-            services.AddTransient<UpdateCustomerKycCommandConsumer>();
+            services.AddTransient(x => new CreateCustomerCommandConsumer(
+                mailerliteConfig,
+                x.GetRequiredService<IUnitOfWorkManager<UnitOfWork>>(),
+                x.GetRequiredService<IMailerliteClient>(),
+                x.GetRequiredService<ILogger<CreateCustomerCommandConsumer>>()));
+            services.AddTransient(x => new UpdateCustomerKycCommandConsumer(
+                mailerliteConfig,
+                x.GetRequiredService<IUnitOfWorkManager<UnitOfWork>>(),
+                x.GetRequiredService<IMailerliteClient>(),
+                x.GetRequiredService<ILogger<UpdateCustomerKycCommandConsumer>>()));
             services.AddTransient<UpdateCustomerDepositedCommandConsumer>();
 
             ConfigureCommands();

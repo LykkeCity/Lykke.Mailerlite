@@ -53,7 +53,7 @@ namespace Lykke.Mailerlite.Worker
                         o.OutboxDeserializer.AddAssembly(typeof(CreateCustomerCommand).Assembly);
                     });
                 })
-                .AddMessaging(Config.RabbitMq);
+                .AddMessaging(Config.RabbitMq, Config.Mailerlite);
         }
     }
 }

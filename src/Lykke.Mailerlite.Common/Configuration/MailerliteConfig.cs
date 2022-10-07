@@ -12,6 +12,6 @@ namespace Lykke.Mailerlite.Common.Configuration
         public string DeleteCustomerFromGroupUrl { set; get; }
         public IEnumerable<string> NewCustomerGroups { set; get; }
         public string KycReminderGroup { set; get; }
-        public IEnumerable<string> StatusesToDeleteFromKycReminderGroupd { set; get; }
+        public IEnumerable<string> StatusesToDeleteFromKycReminderGroup { set; get; }
     }
 }
