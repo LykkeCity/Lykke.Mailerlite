@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using Google.Protobuf.WellKnownTypes;
 using Lykke.Mailerlite.ApiClient;
 using Lykke.Mailerlite.ApiContract;
@@ -73,7 +74,7 @@ namespace Lykke.MailerliteTests.FullTests
                 Times.Once(),
                 ItExpr.Is<HttpRequestMessage>(req => (
                     req.Method == HttpMethod.Put &&
-                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, email)), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
+                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, HttpUtility.UrlEncode(email))), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
                     req.Content.Headers.Any(x => x.Key == ("X-MailerLite-ApiKey") && x.Value.Any(y => y == _workerFixture.MailerliteApiKey)) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("kycstatus")))) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["kycstatus"].Value<string>() == defaultKyc                )),
@@ -85,7 +86,7 @@ namespace Lykke.MailerliteTests.FullTests
                 Times.Once(),
                 ItExpr.Is<HttpRequestMessage>(req => (
                     req.Method == HttpMethod.Put &&
-                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, email)), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
+                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, HttpUtility.UrlEncode(email))), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
                     req.Content.Headers.Any(x => x.Key == ("X-MailerLite-ApiKey") && x.Value.Any(y => y == _workerFixture.MailerliteApiKey)) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("deposited")))) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["deposited"].Value<string>() == "false"
@@ -98,7 +99,7 @@ namespace Lykke.MailerliteTests.FullTests
                 Times.Once(),
                 ItExpr.Is<HttpRequestMessage>(req => (
                     req.Method == HttpMethod.Put &&
-                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, email)), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
+                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, HttpUtility.UrlEncode(email))), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
                     req.Content.Headers.Any(x => x.Key == ("X-MailerLite-ApiKey") && x.Value.Any(y => y == _workerFixture.MailerliteApiKey)) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("has_ever_submitted_documents")))) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["has_ever_submitted_documents"].Value<string>() == "false"
@@ -111,7 +112,7 @@ namespace Lykke.MailerliteTests.FullTests
                 Times.Once(),
                 ItExpr.Is<HttpRequestMessage>(req => (
                     req.Method == HttpMethod.Put &&
-                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, email)), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
+                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, HttpUtility.UrlEncode(email))), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
                     req.Content.Headers.Any(x => x.Key == ("X-MailerLite-ApiKey") && x.Value.Any(y => y == _workerFixture.MailerliteApiKey)) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("registered")))) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["registered"].Value<string>() == timestamp.ToString("yyyy-MM-dd")
@@ -142,7 +143,7 @@ namespace Lykke.MailerliteTests.FullTests
                 Times.Once(),
                 ItExpr.Is<HttpRequestMessage>(req => (
                     req.Method == HttpMethod.Put &&
-                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, email)), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
+                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, HttpUtility.UrlEncode(email))), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
                     req.Content.Headers.Any(x => x.Key == ("X-MailerLite-ApiKey") && x.Value.Any(y => y == _workerFixture.MailerliteApiKey)) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("kycstatus")))) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["kycstatus"].Value<string>() == updatedKyc
@@ -155,7 +156,7 @@ namespace Lykke.MailerliteTests.FullTests
                 Times.Once(),
                 ItExpr.Is<HttpRequestMessage>(req => (
                     req.Method == HttpMethod.Put &&
-                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, email)), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
+                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, HttpUtility.UrlEncode(email))), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
                     req.Content.Headers.Any(x => x.Key == ("X-MailerLite-ApiKey") && x.Value.Any(y => y == _workerFixture.MailerliteApiKey)) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("has_ever_submitted_documents")))) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["has_ever_submitted_documents"].Value<string>() == "true"
@@ -183,7 +184,7 @@ namespace Lykke.MailerliteTests.FullTests
                 Times.Once(),
                 ItExpr.Is<HttpRequestMessage>(req => (
                     req.Method == HttpMethod.Put &&
-                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, email)), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
+                    Uri.Compare(req.RequestUri, new Uri(string.Format(_workerFixture.CustomerUpdateFieldUrl, HttpUtility.UrlEncode(email))), UriComponents.Host | UriComponents.PathAndQuery, UriFormat.SafeUnescaped, StringComparison.OrdinalIgnoreCase) == 0 &&
                     req.Content.Headers.Any(x => x.Key == ("X-MailerLite-ApiKey") && x.Value.Any(y => y == _workerFixture.MailerliteApiKey)) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"].Any(v => (new JObject(v).Properties().Any(p => p.Name.Contains("deposited")))) &&
                     JObject.Parse(req.Content.ReadAsStringAsync().GetAwaiter().GetResult())["fields"]["deposited"].Value<string>() == "true"
