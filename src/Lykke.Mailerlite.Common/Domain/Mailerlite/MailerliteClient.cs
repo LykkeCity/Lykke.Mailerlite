@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Lykke.Mailerlite.Common.Configuration;
 using Lykke.Mailerlite.Common.Domain.Mailerlite.Types;
 using Newtonsoft.Json;
@@ -55,7 +56,7 @@ namespace Lykke.Mailerlite.Common.Domain.Mailerlite
             {
                 Content = content, 
                 Method = HttpMethod.Put,
-                RequestUri = new Uri(string.Format(_mailerliteConfig.CustomerUpdateFieldUrl, email))
+                RequestUri = new Uri(string.Format(_mailerliteConfig.CustomerUpdateFieldUrl, HttpUtility.UrlEncode(email)))
             };
 
             await _httpClient.SendAsync(message);
@@ -74,7 +75,7 @@ namespace Lykke.Mailerlite.Common.Domain.Mailerlite
             {
                 Content = content, 
                 Method = HttpMethod.Put,
-                RequestUri = new Uri(string.Format(_mailerliteConfig.CustomerUpdateFieldUrl, email))
+                RequestUri = new Uri(string.Format(_mailerliteConfig.CustomerUpdateFieldUrl, HttpUtility.UrlEncode(email)))
             };
 
             await _httpClient.SendAsync(message);
@@ -93,7 +94,7 @@ namespace Lykke.Mailerlite.Common.Domain.Mailerlite
             {
                 Content = content, 
                 Method = HttpMethod.Put,
-                RequestUri = new Uri(string.Format(_mailerliteConfig.CustomerUpdateFieldUrl, email))
+                RequestUri = new Uri(string.Format(_mailerliteConfig.CustomerUpdateFieldUrl, HttpUtility.UrlEncode(email)))
             };
 
             await _httpClient.SendAsync(message);
@@ -112,7 +113,7 @@ namespace Lykke.Mailerlite.Common.Domain.Mailerlite
             {
                 Content = content, 
                 Method = HttpMethod.Put,
-                RequestUri = new Uri(string.Format(_mailerliteConfig.CustomerUpdateFieldUrl, email))
+                RequestUri = new Uri(string.Format(_mailerliteConfig.CustomerUpdateFieldUrl, HttpUtility.UrlEncode(email)))
             };
 
             await _httpClient.SendAsync(message);
@@ -171,7 +172,7 @@ namespace Lykke.Mailerlite.Common.Domain.Mailerlite
             var message = new HttpRequestMessage
             {
                 Method = HttpMethod.Delete,
-                RequestUri = new Uri(string.Format(_mailerliteConfig.DeleteCustomerFromGroupUrl, groupId, email))
+                RequestUri = new Uri(string.Format(_mailerliteConfig.DeleteCustomerFromGroupUrl, groupId, HttpUtility.UrlEncode(email)))
             };
             message.Headers.Add("X-MailerLite-ApiKey", _mailerliteConfig.ApiKey);
             

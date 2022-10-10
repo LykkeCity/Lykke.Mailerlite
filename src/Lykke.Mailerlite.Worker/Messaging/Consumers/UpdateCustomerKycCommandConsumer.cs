@@ -63,19 +63,12 @@ namespace Lykke.Mailerlite.Worker.Messaging.Consumers
                         await _mailerlite.SetCustomerKycAsync(customer.Email, command.KycState);
                     }
 
-                    _logger.LogWarning($"xxx _mailerliteConfig.StatusesToDeleteFromKycReminderGroup={string.Join(", ", _mailerliteConfig.StatusesToDeleteFromKycReminderGroup)}");
-                    _logger.LogWarning($"xxx customer.KycState={customer.KycState}");
                     if (_mailerliteConfig.StatusesToDeleteFromKycReminderGroup.Contains(customer.KycState))
                     {
-                        _logger.LogWarning($"xxx _mailerliteConfig.KycReminderGroup={_mailerliteConfig.KycReminderGroup}");
                         var groupdId = await _mailerlite.FindGroupIdByNameAsync(_mailerliteConfig.KycReminderGroup);
-                        _logger.LogWarning($"xxx groupdId={groupdId}");
                         if (groupdId.HasValue)
                         {
-                            _logger.LogWarning($"xxx customer.Email={customer.Email}");
-                            _logger.LogWarning($"xxx groupdId.Value={groupdId.Value}");
                             await _mailerlite.DeleteCustomerFromGroupAsync(customer.Email, groupdId.Value);
-                            _logger.LogWarning($"xxx !!!");
                         }
                     }
 
