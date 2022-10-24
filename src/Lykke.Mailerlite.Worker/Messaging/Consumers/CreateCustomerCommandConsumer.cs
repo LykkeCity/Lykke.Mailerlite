@@ -56,8 +56,14 @@ namespace Lykke.Mailerlite.Worker.Messaging.Consumers
 
                     await _mailerlite.SetCustomerRegisteredAsync(command.Email, command.Timestamp);
 
-                    var addToGroupTaskList = _mailerliteConfig.NewCustomerGroups
-                        .Union(new string[] { _mailerliteConfig.KycReminderGroup })
+                    var groupsToSubscribe = _mailerliteConfig.NewCustomerGroups;
+                    if (!command.FromRestrictedArea)
+                    {
+                        groupsToSubscribe = groupsToSubscribe
+                            .Union(new [] { _mailerliteConfig.KycReminderGroup });
+                    }
+
+                    var addToGroupTaskList = groupsToSubscribe
                         .Select(x => _mailerlite.AddCustomerToGroupAsync(command.Email, x));
                     await Task.WhenAll(addToGroupTaskList);
 

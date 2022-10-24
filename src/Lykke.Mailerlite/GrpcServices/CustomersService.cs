@@ -30,7 +30,8 @@ namespace Lykke.Mailerlite.GrpcServices
                     RequestId = request.RequestId,
                     Email = request.Email,
                     Timestamp = request.Timestamp.ToDateTime(),
-                    KycState = request.KycState
+                    KycState = request.KycState,
+                    FromRestrictedArea = request.FromRestrictedArea
                 });
 
                 return new Empty();
