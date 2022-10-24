@@ -9,5 +9,6 @@ namespace Lykke.Mailerlite.Common.Commands
         public string Email { set; get; }
         public string KycState { set; get; }
         public DateTime Timestamp { set; get; }
+        public bool FromRestrictedArea { get; set; }
     }
 }
