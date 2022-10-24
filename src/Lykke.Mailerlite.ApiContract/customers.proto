@@ -17,6 +17,7 @@ message CreateCustomerRequest {
   string email = 3;
   string kycState = 4;
   google.protobuf.Timestamp timestamp = 5;
+  bool fromRestrictedArea = 6;
 }
 
 message UpdateCustomerKycRequest {
