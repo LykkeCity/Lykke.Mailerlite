@@ -36,7 +36,8 @@ namespace Lykke.MailerliteTests.Sdk
         public string AddCustomerToGroupUrl { set; get; }
         public string FindGroupIdByNameUrl { set; get; }
         public string DeleteCustomerFromGroupUrl { set; get; }
-        public IEnumerable<string> NewCustomerGroups { set; get; }
+        public IEnumerable<string> NewCustomerFromAllAreasGroups { set; get; }
+        public IEnumerable<string> NewCustomerFromUnrestrictedAreaGroups { set; get; }
         public string KycReminderGroup { set; get; }
         public IEnumerable<string> StatusesToDeleteFromKycReminderGroup { set; get; }
         public string MailerliteApiKey { get; }
@@ -59,7 +60,12 @@ namespace Lykke.MailerliteTests.Sdk
             AddCustomerToGroupUrl = "http://fakeurl.com/groups/add";
             FindGroupIdByNameUrl = "http://fakeurl.com/groups/search";
             DeleteCustomerFromGroupUrl = "http://fakeurl.com/groups/delete/{0}/{1}";
-            NewCustomerGroups = new List<string>
+            NewCustomerFromAllAreasGroups = new List<string>
+            {
+                "test1",
+                "test2"
+            };
+            NewCustomerFromUnrestrictedAreaGroups = new List<string>
             {
                 "test1",
                 "test2"
@@ -93,10 +99,15 @@ namespace Lykke.MailerliteTests.Sdk
                 {"Mailerlite:DeleteCustomerFromGroupUrl", DeleteCustomerFromGroupUrl},
                 {"Mailerlite:KycReminderGroup", KycReminderGroup},
             };
-            var newCustomerGroupsList = NewCustomerGroups.ToList();
-            for (int index = 0; index < newCustomerGroupsList.Count; index++)
+            var newCustomerFromAllAreasGroupsList = NewCustomerFromAllAreasGroups.ToList();
+            for (int index = 0; index < newCustomerFromAllAreasGroupsList.Count; index++)
             {
-                defaultAppSettings.Add($"Mailerlite:NewCustomerGroups:{index}", newCustomerGroupsList[index]);
+                defaultAppSettings.Add($"Mailerlite:NewCustomerFromAllAreasGroups:{index}", newCustomerFromAllAreasGroupsList[index]);
+            }
+            var newCustomerFromUnrestrictedAreaGroupsList = NewCustomerFromUnrestrictedAreaGroups.ToList();
+            for (int index = 0; index < newCustomerFromUnrestrictedAreaGroupsList.Count; index++)
+            {
+                defaultAppSettings.Add($"Mailerlite:NewCustomerFromUnrestrictedAreaGroups:{index}", newCustomerFromUnrestrictedAreaGroupsList[index]);
             }
             var statusesToDeleteFromKycReminderGroupList = StatusesToDeleteFromKycReminderGroup.ToList();
             for (int index = 0; index < statusesToDeleteFromKycReminderGroupList.Count; index++)
@@ -125,7 +136,8 @@ namespace Lykke.MailerliteTests.Sdk
                                         AddCustomerToGroupUrl = AddCustomerToGroupUrl,
                                         FindGroupIdByNameUrl = FindGroupIdByNameUrl,
                                         DeleteCustomerFromGroupUrl = DeleteCustomerFromGroupUrl,
-                                        NewCustomerGroups = NewCustomerGroups,
+                                        NewCustomerFromAllAreasGroups = NewCustomerFromAllAreasGroups,
+                                        NewCustomerFromUnrestrictedAreaGroups = NewCustomerFromUnrestrictedAreaGroups,
                                         KycReminderGroup = KycReminderGroup,
                                         StatusesToDeleteFromKycReminderGroup = StatusesToDeleteFromKycReminderGroup
                                     }));

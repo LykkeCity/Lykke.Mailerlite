@@ -56,10 +56,11 @@ namespace Lykke.Mailerlite.Worker.Messaging.Consumers
 
                     await _mailerlite.SetCustomerRegisteredAsync(command.Email, command.Timestamp);
 
-                    var groupsToSubscribe = _mailerliteConfig.NewCustomerGroups;
+                    var groupsToSubscribe = _mailerliteConfig.NewCustomerFromAllAreasGroups;
                     if (!command.FromRestrictedArea)
                     {
                         groupsToSubscribe = groupsToSubscribe
+                            .Union(_mailerliteConfig.NewCustomerFromUnrestrictedAreaGroups)
                             .Union(new [] { _mailerliteConfig.KycReminderGroup });
                     }
 
