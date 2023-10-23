@@ -51,25 +51,25 @@ jobs:
       uses: swisschain/replace-docker-image@master
       env:
         DOCKER_IMAGE_NAME: 'lykke-exchange-lykke-mailerlite'
-        DOCKER_REPOSITORY_NAME: 'swisschains'
+        DOCKER_REPOSITORY_NAME: ${{ vars.DOCKER_IMAGE_OWNER }}
         GIT_USER_API_TOKEN: ${{ secrets.GIT_INFRASTRUCTURE_REPOSITORY_PUSH_API_TOKEN }}
-        GIT_USER_NAME: 'Github Swisschain'
-        GIT_USER_EMAIL: github@swisschain.io
+        GIT_USER_NAME: ${{ vars.GIT_INFRASTRUCTURE_REPOSITORY_PUSH_USER_NAME }}
+        GIT_USER_EMAIL: ${{ vars.GIT_INFRASTRUCTURE_REPOSITORY_PUSH_USER_EMAIL }}
         GIT_INFRASTRUCTURE_REPOSITORY_BRANCH: 'master'
-        GIT_INFRASTRUCTURE_REPOSITORY_OWNER: 'swisschain'
-        GIT_INFRASTRUCTURE_REPOSITORY_NAME: 'lykke-kubernetes-test'
+        GIT_INFRASTRUCTURE_REPOSITORY_OWNER: ${{ github.repository_owner }}
+        GIT_INFRASTRUCTURE_REPOSITORY_NAME: ${{ vars.GIT_INFRASTRUCTURE_REPOSITORY_NAME }}
         GIT_REPOSITORY_NAME: ${{ github.event.repository.name }}
-        INPUT_TAG_NAME_SKIP: 'service-'        
+        INPUT_TAG_NAME_SKIP: 'service-'
     - name: Update Docker Image
       uses: swisschain/replace-docker-image@master
       env:
         DOCKER_IMAGE_NAME: 'lykke-exchange-lykke-mailerlite-worker'
-        DOCKER_REPOSITORY_NAME: 'swisschains'
+        DOCKER_REPOSITORY_NAME: ${{ vars.DOCKER_IMAGE_OWNER }}
         GIT_USER_API_TOKEN: ${{ secrets.GIT_INFRASTRUCTURE_REPOSITORY_PUSH_API_TOKEN }}
-        GIT_USER_NAME: 'Github Swisschain'
-        GIT_USER_EMAIL: github@swisschain.io
+        GIT_USER_NAME: ${{ vars.GIT_INFRASTRUCTURE_REPOSITORY_PUSH_USER_NAME }}
+        GIT_USER_EMAIL: ${{ vars.GIT_INFRASTRUCTURE_REPOSITORY_PUSH_USER_EMAIL }}
         GIT_INFRASTRUCTURE_REPOSITORY_BRANCH: 'master'
-        GIT_INFRASTRUCTURE_REPOSITORY_OWNER: 'swisschain'
-        GIT_INFRASTRUCTURE_REPOSITORY_NAME: 'lykke-kubernetes-test'
+        GIT_INFRASTRUCTURE_REPOSITORY_OWNER: ${{ github.repository_owner }}
+        GIT_INFRASTRUCTURE_REPOSITORY_NAME: ${{ vars.GIT_INFRASTRUCTURE_REPOSITORY_NAME }}
         GIT_REPOSITORY_NAME: ${{ github.event.repository.name }}
-        INPUT_TAG_NAME_SKIP: 'service-'        
+        INPUT_TAG_NAME_SKIP: 'service-'
