@@ -57,6 +57,11 @@ namespace Lykke.Mailerlite.Worker.Messaging.Consumers
                     await _mailerlite.SetCustomerRegisteredAsync(command.Email, command.Timestamp);
 
                     var groupsToSubscribe = _mailerliteConfig.NewCustomerFromAllAreasGroups;
+
+                    // Note: this field is not passed by the KYC service. This task wasn't finished.
+                    // Actually, there is no need to update KYC service to pass this field from there
+                    // the value can be evaluated here by checking POA country status of the user
+                    // take into account the POA can be empty
                     if (!command.FromRestrictedArea)
                     {
                         groupsToSubscribe = groupsToSubscribe
