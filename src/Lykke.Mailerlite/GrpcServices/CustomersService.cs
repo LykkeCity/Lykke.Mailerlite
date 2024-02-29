@@ -31,6 +31,10 @@ namespace Lykke.Mailerlite.GrpcServices
                     Email = request.Email,
                     Timestamp = request.Timestamp.ToDateTime(),
                     KycState = request.KycState,
+                    // Note: this field is not passed by the KYC service. This task wasn't finished.
+                    // Actually, there is no need to update KYC service to pass this field from there
+                    // the value can be evaluated here by checking POA country status of the user
+                    // take into account the POA can be empty
                     FromRestrictedArea = request.FromRestrictedArea
                 });
 
